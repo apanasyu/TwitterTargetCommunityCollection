@@ -49,7 +49,7 @@ For Moscow Russia we choose: moscowgov, MID_RF
 For Minsk Belarus we choose: franakviacorka, BelarusMID, BelarusFeed, Tsihanouskaya
 (it is critical to select influencers that are related to the geographic area of interest, at least 2 influencers are needed. Intersection of followers for every pair of influencers is selected as this increases the chances that the users are from location of interest. If not enough followers are discovered recommend searching for more influencers).
 
-The followers are collected using:
+The followers are collected using (code results in a separate database created for each influencer which contains influencer info and up to 500K of influencer's followers):
 
     influencer1 = ['moscowgov', 'MID_RF']
     influencer2 = ['franakviacorka', 'BelarusMID', 'BelarusFeed', 'Tsihanouskaya']
@@ -61,12 +61,22 @@ The followers are collected using:
     twitterAPI1 = getAPI()
     maxFollowerToCollect = 500000
     for influencerScreenName in influencers:
-        setupDBUsingSingleUser(twitterAPI1, influencerScreenName, maxFollowerToCollect, followersDir, port)
+        setupDBUsingSingleUser(twitterAPI1, db_name=influencerScreenName, maxFollowerToCollect, followersDir, port)
 
 The communities are formed from followers:
 
+    minFriend = 10
+    maxFriend = 50
+    maxFollower = 500
 
-
+    communities = {}
+    communities["ComMoscowRussiaTwitter"] = influencer1
+    communities["ComMinskBelarusTwitter"] = influencer2
+    for communityName in communities:
+        print("working on community for: " + str(communityName))
+        followersMeetingThreshold = formCommunities(communities[communityName], followersDir, minFriend, maxFriend, maxFollower)
+        from CollectFriends import mainProcessFriends
+        mainProcessFriends(twitterAPI1, db_name=communityName, collectionName="friendsOfCommunity", followersMeetingThreshold, port)
 
 We want to focus on ordinary followers (by ordinary we mean average users that are not bots and not influencers themselves). In order to increase probability that it is an ordinary follower we focus on those that have: between 10 and 50 friends and less than 500 followers. The developer is free to choose their own thresholds when forming community. A geocoder could also be applied if available as an additional filter, but this should be done with care since most followers will not report a location that is geocodable.
 
@@ -75,7 +85,21 @@ For example for community around Belarus:
 823 final community after applying thresholds
 Twitter API allows 1 API call per minute when collecting friends of followers. So approximately 823 minutes ~= 14 hours will be required to collect all friends.
 
+The database holding friends will look like this (id string for the user part of the community and the list of ids that he follows):
+![image](https://user-images.githubusercontent.com/80060152/111842545-000a8380-88d6-11eb-916f-47824b797d8b.png)
+
 Step 3: The users followed by the community (friends collected in previous step) are filtered and ranked via a TF-IDF model.
+
+The collection process from step 1 and step 2 resulted in a large set of users that are being followed by the community. Below is a depiction of the collection process.
+
+![image](https://user-images.githubusercontent.com/80060152/111843042-d9008180-88d6-11eb-9fa3-1ad7f5ddd72b.png)
+
+For each unique id that is followed by the community we record how many times the id has been followed. We also use Twitter API to look up user profile information for each id. This is accomplished via following code:
+
+
+
+The top 10 influencers for 
+
 
 
 
