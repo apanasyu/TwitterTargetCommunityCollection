@@ -92,7 +92,7 @@ Step 3: The users followed by the community (friends collected in previous step)
 
 The collection process from step 1 and step 2 resulted in a large set of users that are being followed by the community. Below is a depiction of the collection process.
 
-![image](https://user-images.githubusercontent.com/80060152/111843042-d9008180-88d6-11eb-9fa3-1ad7f5ddd72b.png)
+![image](https://user-images.githubusercontent.com/80060152/111843399-79ef3c80-88d7-11eb-957f-90300ee156f1.png)
 
 For each unique id that is followed by the community we record how many times the id has been followed. We also use Twitter API to look up user profile information for each id. This is accomplished via following code:
 
