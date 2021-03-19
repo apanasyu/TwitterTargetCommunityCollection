@@ -24,9 +24,9 @@ https://developer.twitter.com/en/docs/twitter-api/getting-started/guide
 (By registering an app you will obtain four tokens: consumer key, consumer secret, access token, and access secret. Go inside TwitterAPI.py and put these keys inside getAPI method).
 
 # Influential users and communities for Minsk, Belarus vs. Moscow, Russia
-Step 1: User needs to specify 2 or more queries that contain locations of interest and keyword 'Twitter'. Twitter screennames from top 100 URLs from Google search are utilized. Twitter API used to collect information about each screenname verifying that it is a user on Twitter and providing additional information such as description, number of followers, and other features from user's profile.
+Step 1: User needs to specify 2 or more queries that contain locations of interest and keyword 'Twitter' (alternatively can search for influencers of interest manually and go directly to step 2). Twitter screennames from top 100 URLs from Google search are utilized. Twitter API used to collect information about each screenname verifying that it is a user on Twitter and providing additional information such as description, number of followers, and other features from user's profile.
 
-    queries = ["Minsk Belarus Twitter", "Moscow Russia Twitter"]
+    queries = ["Minsk Belarus Twitter", "Moskva Russia Twitter"]
     import time
     for query in queries:
         potentialInfluencerToWebHit = googleSearch(query)
@@ -44,10 +44,46 @@ Step 1: User needs to specify 2 or more queries that contain locations of intere
 For each query this will generate a CSV file that needs to be examined by hand:
 ![image](https://user-images.githubusercontent.com/80060152/111816094-cbd19b80-88b2-11eb-8596-3c22ef48db34.png)
 
-Step 2: An initial set of geo-influencers is selected from the CSV files using fields such as the self-reported location and description
-For Moscow Russia we choose: moscowgov, KremlinRussia_E
-For Minsk Belarus we choose: franakviacorka, BelarusFeed
-(it is critical to select influencers that are related to the geographic area of interest, at least 2 influencers are selected and interesection of their followers is used to form community. If not enough followers are found to intersect it is recommended that more influencers are loaded).
+Step 2: An initial set of geo-influencers is selected from the CSV files using fields such as the self-reported location and description:
+For Moscow Russia we choose: moscowgov, MID_RF
+For Minsk Belarus we choose: franakviacorka, BelarusMID, BelarusFeed, Tsihanouskaya
+(it is critical to select influencers that are related to the geographic area of interest, at least 2 influencers are needed. Intersection of followers for every pair of influencers is selected as this increases the chances that the users are from location of interest. If not enough followers are discovered recommend searching for more influencers).
+
+The followers are collected using:
+
+    influencer1 = ['moscowgov', 'MID_RF']
+    influencer2 = ['franakviacorka', 'BelarusMID', 'BelarusFeed', 'Tsihanouskaya']
+    influencers = influencer1+influencer2
+    '''collect influencer's followers and profile information of each follower'''
+    port = 27020
+    from MainDBSetup import setupDBUsingSingleUser
+    from TwitterAPI import getAPI
+    twitterAPI1 = getAPI()
+    maxFollowerToCollect = 500000
+    for influencerScreenName in influencers:
+        setupDBUsingSingleUser(twitterAPI1, influencerScreenName, maxFollowerToCollect, followersDir, port)
+
+The communities are formed from followers:
+
+
+
+
+We want to focus on ordinary followers (by ordinary we mean average users that are not bots and not influencers themselves). In order to increase probability that it is an ordinary follower we focus on those that have: between 10 and 50 friends and less than 500 followers. The developer is free to choose their own thresholds when forming community. A geocoder could also be applied if available as an additional filter, but this should be done with care since most followers will not report a location that is geocodable.
+
+For example for community around Belarus:
+14417 followers of interest by iterating over every pair of influencers
+823 final community after applying thresholds
+Twitter API allows 1 API call per minute when collecting friends of followers. So approximately 823 minutes ~= 14 hours will be required to collect all friends.
+
+Step 3: The users followed by the community (friends collected in previous step) are filtered and ranked via a TF-IDF model.
+
+
+
+
+
+
+
+
 
 
 
