@@ -1,0 +1,2 @@
+# TwitterTargetCommunityCollection
+Part of PhD research at Syracuse University. The code is related to quickly identifying users that are from a city of interest and the influencers for the city on Twitter. For example, Twitter users that are from Syracuse NY and the corresponding influencers are the city mayor, local news, local sports, etc. This is done leveraging Google search and network follower-followee structure with minimal human in the loop verification.
