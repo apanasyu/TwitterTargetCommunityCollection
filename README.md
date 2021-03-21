@@ -96,9 +96,19 @@ The collection process from step 1 and step 2 resulted in a large set of users t
 
 For each unique id that is followed by the community we record how many times the id has been followed. We also use Twitter API to look up user profile information for each id. This is accomplished via following code:
 
+    for communityName in communities:
+        db_name = communityName
+        collectionName = "friendsOfCommunity"
+
+        usersCommunityFollows = loadFriends(db[collectionName])
+        friends = usersCommunityFollows.keys()
+        collectionNameToWrite = "friendInfo"
+        collectionNameToWrite2 = "communityOverWhichFriendInfoCollected"
+        mainProcessIDs(twitterAPI1, db_name, collectionNameToWrite, friends, collectionNameToWrite2, port)   
+
+As an example the top 10 influencers for community in Belarus are:
 
 
-The top 10 influencers for 
 
 
 
