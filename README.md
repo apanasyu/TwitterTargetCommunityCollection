@@ -88,7 +88,7 @@ Twitter API allows 1 API call per minute when collecting friends of followers. S
 The database holding friends will look like this (id string for the user part of the community and the list of ids that he follows):
 ![image](https://user-images.githubusercontent.com/80060152/111842545-000a8380-88d6-11eb-916f-47824b797d8b.png)
 
-Step 3: The users followed by the community (friends collected in previous step) are filtered and ranked via a TF-IDF model.
+Step 3: The users followed by the community (friends collected in previous step) are filtered and ranked by most frequent.
 
 The collection process from step 1 and step 2 resulted in a large set of users that are being followed by the community. Below is a depiction of the collection process.
 
@@ -101,15 +101,21 @@ For each unique id that is followed by the community we record how many times th
         collectionName = "friendsOfCommunity"
 
         usersCommunityFollows = loadFriends(db[collectionName])
-        friends = usersCommunityFollows.keys()
+        friends = list(usersCommunityFollows.keys())
         collectionNameToWrite = "friendInfo"
         collectionNameToWrite2 = "communityOverWhichFriendInfoCollected"
-        mainProcessIDs(twitterAPI1, db_name, collectionNameToWrite, friends, collectionNameToWrite2, port)   
+        mainProcessIDs(twitterAPI1, db_name, collectionNameToWrite, friends, collectionNameToWrite2, port, True)
+        getTopNCommunityFollowsInCSV(db_name, "friendInfo", port, usersCommunityFollows, 50, communityName)
+        
+As an example the top 25 influencers for community around Russia are:
+![image](https://user-images.githubusercontent.com/80060152/111890275-40ddc780-89be-11eb-8c1e-48775fdee550.png)
 
-As an example the top 10 influencers for community in Belarus are:
+In comparison here are the top 25 influencers for community around Belarus:
+![image](https://user-images.githubusercontent.com/80060152/111890353-f9a40680-89be-11eb-906d-cb4e0543db71.png)
 
+(For the most part all of the users are related to the specific geographic area we were after. Notice that for example JoeBiden makes it into the list for Belarus, such influencers can make it in due to them being popular worldwide and therefore may be popular for both communities. In the next step better ranking provided via TF-IDF ranking.)
 
-
+Step 4: A TF-IDF model is applied to better rank the influencers that differentiate the two or more communities
 
 
 
