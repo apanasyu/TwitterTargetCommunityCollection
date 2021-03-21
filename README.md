@@ -51,7 +51,7 @@ For Minsk Belarus we choose: franakviacorka, BelarusMID, BelarusFeed, Tsihanousk
 
 The followers are collected using (code results in a separate database created for each influencer which contains influencer info and up to 500K of influencer's followers):
 
-    influencer1 = ['moscowgov', 'MID_RF']
+    influencer1 = ['moscowgov', 'MID_RF', 'mfa_russia']
     influencer2 = ['franakviacorka', 'BelarusMID', 'BelarusFeed', 'Tsihanouskaya']
     influencers = influencer1+influencer2
     '''collect influencer's followers and profile information of each follower'''
@@ -140,6 +140,8 @@ The TF-IDF ranking is better aligned and @JoeBiden is no longer in the list (not
 ![image](https://user-images.githubusercontent.com/80060152/111919130-b7ca9d00-8a5e-11eb-8382-f2fd33bfa730.png)
 
 Using these new influencers the process can be repeated i.e. the followers associated with new influencers can be used to refine the community of users and this community can be used to rank even more influencers as they related to the geographic area of interest.
+
+The folder program output contains output for influencers via Google search and rankings via TF-IDF and based on most frequent for the above examples as well as Syracuse NY and Buffalo NY (USA based cities typically will have greater Twitter usage and more data from Google and so the approach works even better for these, but we really wanted to emphasize an example where a good geocoding solution may not exist).
 
 
 
