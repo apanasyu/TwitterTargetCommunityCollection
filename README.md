@@ -133,11 +133,11 @@ As an example, using the most frequent follows, here are the top 25 influencers 
 
 For the most part all of the users are related to Belarus. Notice that JoeBiden is ranked #24, such influencers can make it in due to them being popular worldwide and therefore not surprising that they are popular for Belarus community. In order to get rid of these global influencers it is important to compare vs. another community. TF-IDF may be applied where the number of documents are the number of communities and the terms are the follows made by the community. Here is a ranking via TF-IDF using communities for Belarus vs. Russia.
 
-![image](https://user-images.githubusercontent.com/80060152/111918943-d1b7b000-8a5d-11eb-806f-fd57dca2c84c.png)
+![image](https://user-images.githubusercontent.com/80060152/111919151-daf54c80-8a5e-11eb-9b17-e8724feab517.png)
 
 The TF-IDF ranking is better aligned and @JoeBiden is no longer in the list (not even in the top 500). Here is the corresponding TF-IDF ranking for Russia:
 
-![image](https://user-images.githubusercontent.com/80060152/111919007-1cd1c300-8a5e-11eb-9636-eb92f45966c4.png)
+![image](https://user-images.githubusercontent.com/80060152/111919130-b7ca9d00-8a5e-11eb-8382-f2fd33bfa730.png)
 
 Using these new influencers the process can be repeated i.e. the followers associated with new influencers can be used to refine the community of users and this community can be used to rank even more influencers as they related to the geographic area of interest.
 
