@@ -15,7 +15,7 @@ Given a city of interest and a list of other cities from which to distinguish fr
 
 Utilizing Ubuntu operating system, MongoDB for storing Tweets, Python 3.x as the programming language.
 
-Python interfaces with MongoDB using pymongo (pip install pymongo), with Twitter using tweepy (pip install tweepy). Other library dependencies: pip3 install google (https://pypi.org/project/google/#files)
+Python interfaces with MongoDB using pymongo (pip install pymongo), with Twitter using tweepy (pip install tweepy). Other library dependencies: pip3 install google (https://pypi.org/project/google/#files), gensim
 
 Important: Before using the Twitter API you are required to create and register your app (this is free), see:
 
@@ -88,7 +88,7 @@ Twitter API allows 1 API call per minute when collecting friends of followers. S
 The database holding friends will look like this (id string for the user part of the community and the list of ids that he follows):
 ![image](https://user-images.githubusercontent.com/80060152/111842545-000a8380-88d6-11eb-916f-47824b797d8b.png)
 
-Step 3: The users followed by the community (friends collected in previous step) are filtered and ranked by most frequent.
+Step 3: The info for users followed by the community (friends collected in previous step) is collected using Twitter API.
 
 The collection process from step 1 and step 2 resulted in a large set of users that are being followed by the community. Below is a depiction of the collection process.
 
@@ -105,18 +105,41 @@ For each unique id that is followed by the community we record how many times th
         collectionNameToWrite = "friendInfo"
         collectionNameToWrite2 = "communityOverWhichFriendInfoCollected"
         mainProcessIDs(twitterAPI1, db_name, collectionNameToWrite, friends, collectionNameToWrite2, port, True)
-        getTopNCommunityFollowsInCSV(db_name, "friendInfo", port, usersCommunityFollows, 50, communityName)
+
+Step 4: The final step is to rank via frequency and via TF-IDF:
+
+To generate a ranking via frequency:
+
+    topRankedUsingFrequency = 50
+    db_name = communityName
+    getTopNCommunityFollowsInCSV(db_name, "friendInfo", port, usersCommunityFollows, topRankedUsingFrequency)
+
+To generate a ranking via TF-IDF:
+
+    communityToCommunityFollows = {}
+    for communityName in communities:
+        communityToCommunityFollows[communityName] = usersCommunityFollows
         
-As an example the top 25 influencers for community around Russia are:
-![image](https://user-images.githubusercontent.com/80060152/111890275-40ddc780-89be-11eb-8c1e-48775fdee550.png)
+    from TFIDF import generateTFIDFRanking
+    minFollowsByCommunity = 10
+    dictionary, influencerToDictCount, tfidf, indexTFIDF, lsi_model, indexLSI, communityLabels, communityVectorsLSI, communityVectorsTFIDF = generateTFIDFRanking(communityToCommunityFollows, minFollowsByCommunity)
+    topNInfluencersPerCommunity = 500
+    from TFIDF import writeTopNVectors
+    writeTopNVectors(communityToCommunityFollows, dictionary, communityVectorsTFIDF, topNInfluencersPerCommunity, port, outputDir)
 
-In comparison here are the top 25 influencers for community around Belarus:
-![image](https://user-images.githubusercontent.com/80060152/111890353-f9a40680-89be-11eb-906d-cb4e0543db71.png)
+As an example, using the most frequent follows, here are the top 25 influencers of Belarus:
 
-(For the most part all of the users are related to the specific geographic area we were after. Notice that for example JoeBiden makes it into the list for Belarus, such influencers can make it in due to them being popular worldwide and therefore may be popular for both communities. In the next step better ranking provided via TF-IDF ranking.)
+![image](https://user-images.githubusercontent.com/80060152/111918679-a1bbdd00-8a5c-11eb-8452-29dad674cd5a.png)
 
-Step 4: A TF-IDF model is applied to better rank the influencers that differentiate the two or more communities
+For the most part all of the users are related to Belarus. Notice that JoeBiden is ranked #24, such influencers can make it in due to them being popular worldwide and therefore not surprising that they are popular for Belarus community. In order to get rid of these global influencers it is important to compare vs. another community. TF-IDF may be applied where the number of documents are the number of communities and the terms are the follows made by the community. Here is a ranking via TF-IDF using communities for Belarus vs. Russia.
 
+![image](https://user-images.githubusercontent.com/80060152/111918943-d1b7b000-8a5d-11eb-806f-fd57dca2c84c.png)
+
+The TF-IDF ranking is better aligned and @JoeBiden is no longer in the list (not even in the top 500). Here is the corresponding TF-IDF ranking for Russia:
+
+![image](https://user-images.githubusercontent.com/80060152/111919007-1cd1c300-8a5e-11eb-9636-eb92f45966c4.png)
+
+Using these new influencers the process can be repeated i.e. the followers associated with new influencers can be used to refine the community of users and this community can be used to rank even more influencers as they related to the geographic area of interest.
 
 
 
