@@ -42,7 +42,7 @@ Step 1: User needs to specify 2 or more queries that contain locations of intere
 
 
 For each query this will generate a CSV file that needs to be examined by hand:
-![image](https://user-images.githubusercontent.com/80060152/111816094-cbd19b80-88b2-11eb-8596-3c22ef48db34.png)
+![image](https://user-images.githubusercontent.com/80060152/111919672-94edb800-8a61-11eb-8ecd-4f4c98b33854.png)
 
 Step 2: An initial set of geo-influencers is selected from the CSV files using fields such as the self-reported location and description:
 For Moscow Russia we choose: moscowgov, MID_RF
