@@ -15,7 +15,7 @@ Given a city of interest and a list of other cities from which to distinguish fr
 
 Utilizing Ubuntu operating system, MongoDB for storing Tweets, Python 3.x as the programming language.
 
-Python interfaces with MongoDB using pymongo (pip install pymongo), with Twitter using tweepy (pip install tweepy). Other library dependencies: pip3 install google (https://pypi.org/project/google/#files), gensim
+Python interfaces with MongoDB using pymongo (pip install pymongo), with Twitter using tweepy (pip install tweepy). Other library dependencies: pip3 install google, gensim
 
 Important: Before using the Twitter API you are required to create and register your app (this is free), see:
 
