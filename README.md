@@ -143,7 +143,9 @@ Using these new influencers the process can be repeated i.e. the followers assoc
 
 The folder program output contains output for influencers via Google search and rankings via TF-IDF and based on most frequent for the above examples as well as Syracuse NY and Buffalo NY (USA based cities typically will have greater Twitter usage and more data from Google and so the approach may work even better for these, but we really wanted to emphasize an example where a good geocoding solution may not exist).
 
-
+For more information see:
+[1] Panasyuk, Aleksey, Edmund Szu-Li Yu, and Kishan G. Mehrotra. "Augmenting Google Search in Ranking Twitter Users." 2019 IEEE 13th International Conference on Semantic Computing (ICSC). IEEE, 2019.
+[2] Panasyuk, Aleksey, Kishan G. Mehrotra, and Edmund Szu-Li Yu. "Automated Location-Aware Influencer Evaluation." Proceedings of the 3rd International Conference on Vision, Image and Signal Processing. 2019.
 
 
 
